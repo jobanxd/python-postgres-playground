@@ -18,7 +18,8 @@ Whether you're new to databases or want to sharpen your skills integrating Postg
 
 ## Getting Started
 
-1. Install PostgreSQL and create a test database and user.
+1. Created PostgreSQL via Docker
+    docker run --name my-postgres -e POSTGRES_USER=<<user>> -e POSTGRES_PASSWORD=<<password>> -e POSTGRES_DB=<<db_name>> -p 5432:5432 -d postgres
 2. Set up a Python virtual environment and install dependencies (`psycopg2-binary`).
 3. Run and modify the example scripts to understand how Python interacts with PostgreSQL.
 
