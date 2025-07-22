@@ -1,5 +1,4 @@
 import psycopg2
-from psycopg2 import sql
 import os
 from dotenv import load_dotenv
 
@@ -63,7 +62,48 @@ class Postgres:
         self.execute_query(query,values)
         print("Successfull running insert_rows()")
 
-    def update_row(self, table_name: str, column_name: str, new_value, condition: str):
-        query = f"UPDATE {table_name} SET {column_name} = {new_value} WHERE {condition};"
-        self.execute_query(query)
-    
+    def update_row(self, table_name: str, column_name: str, new_value, condition: str, condition_params: tuple = ()):
+        query = f"UPDATE {table_name} SET {column_name} = %s WHERE {condition};"
+        params = (new_value,) + condition_params
+        print(f"Query to be processed:\n\t{query}\nWith params:\n\t{params}")
+        self.execute_query(query, params)
+        print("Updated data!")
+
+    def select_all(self, table_name: str):
+        query = f"SELECT * FROM {table_name};"
+        result = self.execute_query(query, fetch=True)
+        if result:
+            for row in result:
+                print(row)
+        else:
+            print("No data found!")
+        return result
+        
+if __name__ == "__main__":
+    db = Postgres()
+
+    # Create Table
+    # db.create_table("users")
+    table_name = "users"
+
+    # Insert rows
+    # table_name = "users"
+    # data = {
+    #     "name" : "John Doe",
+    #     "age" : 24,
+    #     "email": "johndoe@example.com"
+    # }
+    # db.insert_rows(table_name=table_name, data=data)
+
+    # Select All
+    db.select_all(table_name=table_name)
+
+    # Update Row
+    # Update email for user with id = 1
+    # db.update_row(
+    #     table_name="users",
+    #     column_name="age",
+    #     new_value=30,
+    #     condition="id = %s",
+    #     condition_params=(1,)
+    # )
